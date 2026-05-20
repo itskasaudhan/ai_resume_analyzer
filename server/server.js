@@ -6,6 +6,11 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 
 // ── Connect to MongoDB
+// ── Create uploads folder if not exists
+const fs = require('fs');
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads');
+}
 connectDB();
 
 // ── Create Express app
