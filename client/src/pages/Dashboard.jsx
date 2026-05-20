@@ -5,7 +5,8 @@ import { toast } from 'react-toastify'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
-const API_URL = 'http://localhost:5000/api'
+
+const API_URL = 'https://ai-resume-analyzer-2-70e6.onrender.com/api'
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  QUESTION CARD WITH DROPDOWN
