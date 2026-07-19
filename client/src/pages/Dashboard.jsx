@@ -9,6 +9,32 @@ import { useNavigate } from 'react-router-dom'
 const API_URL = 'https://ai-resume-analyzer-2-70e6.onrender.com/api'
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ICONS (inline SVG — no emoji, no extra deps)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const Icon = ({ path, className = 'w-5 h-5' }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={path} />
+  </svg>
+)
+
+const ICONS = {
+  document: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+  clock: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+  chat: 'M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+  bulb: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
+  chart: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+  note: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+  check: 'M5 13l4 4L19 7',
+  checkCircle: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+  cross: 'M6 18L18 6M6 6l12 12',
+  target: 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-4a6 6 0 100-12 6 6 0 000 12zm0-3a3 3 0 100-6 3 3 0 000 6z',
+  upload: 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M12 12v9m0-9l-3 3m3-3l3 3',
+  chevron: 'M19 9l-7 7-7-7',
+  arrowRight: 'M14 5l7 7m0 0l-7 7m7-7H3',
+  inbox: 'M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6m16 0l-2.5 5H6.5L4 13m16 0h-4l-1 2h-6l-1-2H4',
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  QUESTION CARD WITH DROPDOWN
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const QuestionCard = ({ q, i, color, darkMode, text, innerCard }) => {
@@ -27,9 +53,7 @@ const QuestionCard = ({ q, i, color, darkMode, text, innerCard }) => {
         onClick={() => setOpen(!open)}
         className="w-full p-5 flex items-start justify-between gap-4 text-left">
         <p className={`${text} font-medium leading-relaxed`}>Q{i + 1}. {q.question}</p>
-        <span className={`${c.label} text-lg shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : 'rotate-0'}`}>
-          ▾
-        </span>
+        <Icon path={ICONS.chevron} className={`${c.label} w-5 h-5 shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : 'rotate-0'}`} />
       </button>
 
       {open && (
@@ -37,13 +61,17 @@ const QuestionCard = ({ q, i, color, darkMode, text, innerCard }) => {
           <div className="pt-4 space-y-3">
             {q.answer && (
               <div className={`rounded-xl p-4 ${c.bg} border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                <p className={`text-xs font-semibold uppercase tracking-wider ${c.label} mb-2`}>💬 Model Answer</p>
+                <p className={`text-xs font-semibold uppercase tracking-wider ${c.label} mb-2 flex items-center gap-1.5`}>
+                  <Icon path={ICONS.chat} className="w-3.5 h-3.5" /> Model Answer
+                </p>
                 <p className={`${c.answer} text-sm leading-relaxed`}>{q.answer}</p>
               </div>
             )}
             {q.tip && (
               <div className="flex items-start gap-2">
-                <span className={`${c.label} text-xs font-semibold uppercase tracking-wider shrink-0 mt-0.5`}>💡 Tip:</span>
+                <span className={`${c.label} text-xs font-semibold uppercase tracking-wider shrink-0 mt-0.5 flex items-center gap-1`}>
+                  <Icon path={ICONS.bulb} className="w-3.5 h-3.5" /> Tip:
+                </span>
                 <p className={`${c.tip} text-sm`}>{q.tip}</p>
               </div>
             )}
@@ -105,7 +133,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
       return
     }
     setSelectedFile(file)
-    toast.success('File selected! ✅')
+    toast.success('File selected!')
   }
 
   const handleDrop = (e) => {
@@ -126,7 +154,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
     try {
       const formData = new FormData()
       formData.append('resume', selectedFile)
-      toast.info('⏳ Uploading resume...')
+      toast.info('Uploading resume...')
 
       const uploadRes = await axios.post(
         `${API_URL}/resume/upload`, formData,
@@ -135,7 +163,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
 
       const id = uploadRes.data.resume.id
       setResumeId(id)
-      toast.info('🤖 Analyzing with AI...')
+      toast.info('Analyzing with AI...')
 
       const analyzeRes = await axios.post(
         `${API_URL}/analysis/analyze/${id}`, {},
@@ -143,7 +171,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
       )
 
       setAnalysis(analyzeRes.data.analysis)
-      toast.success('Resume analyzed! 🎉')
+      toast.success('Resume analyzed!')
       fetchHistory()
 
     } catch (error) {
@@ -169,7 +197,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
     setQuestions(null)
     setHistoryOpen(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    toast.success(`Loaded: ${resume.originalName} 📄`)
+    toast.success(`Loaded: ${resume.originalName}`)
   }
 
   const handleGenerateQuestions = async () => {
@@ -177,13 +205,13 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
     setQuestionsLoading(true)
     setQuestions(null)
     try {
-      toast.info('🤖 Generating interview questions...')
+      toast.info('Generating interview questions...')
       const res = await axios.post(
         `${API_URL}/analysis/questions/${resumeId}`, {},
         { headers: { 'Authorization': `Bearer ${token}` }}
       )
       setQuestions(res.data.questions)
-      toast.success('Interview questions ready! 🎯')
+      toast.success('Interview questions ready!')
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to generate questions!')
     } finally {
@@ -263,7 +291,9 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
           style={{ boxShadow: darkMode ? '0 0 40px rgba(99,102,241,0.08)' : 'none' }}>
 
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-xl">📄</div>
+            <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+              <Icon path={ICONS.document} className="w-5 h-5" />
+            </div>
             <div>
               <h2 className={`text-xl font-bold ${text}`}>Upload Resume</h2>
               <p className={`${subtext} text-sm`}>PDF format only, max 5MB</p>
@@ -285,8 +315,13 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
                     : 'border-gray-300 hover:border-indigo-400 hover:bg-indigo-50'
             }`}>
 
-            <div className="text-5xl mb-4">
-              {dragOver ? '🎯' : selectedFile ? '✅' : '☁️'}
+            <div className="flex justify-center mb-4">
+              <Icon
+                path={selectedFile ? ICONS.checkCircle : ICONS.upload}
+                className={`w-12 h-12 transition-colors duration-300 ${
+                  dragOver ? 'text-indigo-400' : selectedFile ? 'text-indigo-500' : subtext
+                }`}
+              />
             </div>
 
             {selectedFile ? (
@@ -296,7 +331,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
               </div>
             ) : (
               <div>
-                <p className={`${text} font-medium`}>Drop your resume here</p>
+                <p className={`${text} font-medium`}>{dragOver ? 'Drop file here' : 'Drop your resume here'}</p>
                 <p className={`${subtext} text-sm mt-1`}>or click to browse files</p>
               </div>
             )}
@@ -307,7 +342,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
           {selectedFile && (
             <button onClick={() => setSelectedFile(null)}
               className="mt-3 text-gray-500 hover:text-red-400 text-sm transition-all flex items-center gap-1">
-              ✕ Remove file
+              <Icon path={ICONS.cross} className="w-3.5 h-3.5" /> Remove file
             </button>
           )}
 
@@ -316,8 +351,8 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             className="mt-6 w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-all duration-300"
             style={{ boxShadow: (!loading && selectedFile) ? '0 0 25px rgba(99,102,241,0.4)' : 'none' }}>
             {loading
-              ? <span className="flex items-center justify-center gap-2">⏳ Processing your resume...</span>
-              : <span className="flex items-center justify-center gap-2">🚀 Upload & Analyze</span>
+              ? <span className="flex items-center justify-center gap-2">Processing your resume...</span>
+              : <span className="flex items-center justify-center gap-2">Upload & Analyze</span>
             }
           </button>
         </div>
@@ -330,15 +365,15 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             onClick={() => setHistoryOpen(!historyOpen)}
             className="w-full flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-xl">🕓</div>
+              <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                <Icon path={ICONS.clock} className="w-5 h-5" />
+              </div>
               <div className="text-left">
                 <h2 className={`text-xl font-bold ${text}`}>Resume History</h2>
                 <p className={`${subtext} text-sm`}>{history.length} resume{history.length !== 1 ? 's' : ''} uploaded • click to view</p>
               </div>
             </div>
-            <span className={`${subtext} text-2xl transition-transform duration-300 ${historyOpen ? 'rotate-180' : 'rotate-0'}`}>
-              ▾
-            </span>
+            <Icon path={ICONS.chevron} className={`${subtext} w-6 h-6 transition-transform duration-300 ${historyOpen ? 'rotate-180' : 'rotate-0'}`} />
           </button>
 
           {historyOpen && (
@@ -349,7 +384,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
                 </div>
               ) : history.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-4xl mb-3">📭</p>
+                  <Icon path={ICONS.inbox} className={`w-10 h-10 mx-auto mb-3 ${subtext}`} />
                   <p className={subtext}>No resumes uploaded yet</p>
                 </div>
               ) : (
@@ -367,8 +402,8 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
                           className={`${innerCard} rounded-2xl p-4 border ${darkMode ? 'border-gray-700/50' : 'border-gray-200'} flex items-center justify-between gap-4 cursor-pointer hover:border-indigo-500/50 hover:scale-[1.01] transition-all duration-200`}>
 
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-9 h-9 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-base shrink-0">
-                              📄
+                            <div className="w-9 h-9 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0">
+                              <Icon path={ICONS.document} className="w-4 h-4" />
                             </div>
                             <div className="min-w-0">
                               <p className={`${text} font-medium text-sm truncate`}>{resume.originalName}</p>
@@ -385,7 +420,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
                             <div className={`px-3 py-1.5 rounded-xl border text-sm font-bold ${scoreBg} ${scoreColor}`}>
                               {score ? `${score}/100` : 'Not analyzed'}
                             </div>
-                            {score && <span className="text-indigo-400 text-sm">→</span>}
+                            {score && <Icon path={ICONS.arrowRight} className="w-4 h-4 text-indigo-400" />}
                           </div>
                         </div>
                       )
@@ -409,7 +444,9 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             style={{ boxShadow: darkMode ? '0 0 40px rgba(99,102,241,0.08)' : 'none' }}>
 
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-xl">📊</div>
+              <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                <Icon path={ICONS.chart} className="w-5 h-5" />
+              </div>
               <div>
                 <h2 className={`text-xl font-bold ${text}`}>Analysis Results</h2>
                 <p className={`${subtext} text-sm`}>AI-powered resume evaluation</p>
@@ -434,7 +471,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             {/* Summary */}
             <div className={`${innerCard} rounded-2xl p-5 mb-6 border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
               <div className="flex items-center gap-2 mb-3">
-                <span>📝</span>
+                <Icon path={ICONS.note} className={`w-4 h-4 ${subtext}`} />
                 <h3 className={`${subtext} text-sm font-semibold uppercase tracking-wider`}>Summary</h3>
               </div>
               <p className={`${text} leading-relaxed`}>{analysis.summary}</p>
@@ -444,12 +481,12 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-5">
                 <h3 className="text-green-400 font-semibold mb-4 flex items-center gap-2">
-                  <span>✅</span> Strengths
+                  <Icon path={ICONS.checkCircle} className="w-4 h-4" /> Strengths
                 </h3>
                 <ul className="space-y-3">
                   {analysis.strengths.map((item, i) => (
                     <li key={i} className="text-green-300 text-sm flex items-start gap-2">
-                      <span className="mt-0.5 text-green-500">✓</span>
+                      <Icon path={ICONS.check} className="w-4 h-4 mt-0.5 text-green-500 shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -457,12 +494,12 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
               </div>
               <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-5">
                 <h3 className="text-red-400 font-semibold mb-4 flex items-center gap-2">
-                  <span>⚠️</span> Improvements
+                  <Icon path={ICONS.cross} className="w-4 h-4" /> Improvements
                 </h3>
                 <ul className="space-y-3">
                   {analysis.improvements.map((item, i) => (
                     <li key={i} className="text-red-300 text-sm flex items-start gap-2">
-                      <span className="mt-0.5 text-red-500">✗</span>
+                      <Icon path={ICONS.cross} className="w-4 h-4 mt-0.5 text-red-500 shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -473,7 +510,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             {/* Suggestions */}
             <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-5 mb-8">
               <h3 className="text-indigo-400 font-semibold mb-4 flex items-center gap-2">
-                <span>💡</span> Suggestions
+                <Icon path={ICONS.bulb} className="w-4 h-4" /> Suggestions
               </h3>
               <ul className="space-y-3">
                 {analysis.suggestions.map((item, i) => (
@@ -490,16 +527,15 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             <button
               onClick={handleGenerateQuestions}
               disabled={questionsLoading}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-all duration-300"
-              style={{ boxShadow: !questionsLoading ? '0 0 25px rgba(147,51,234,0.4)' : 'none' }}>
-              {questionsLoading ? '⏳ Generating Questions...' : '🎯 Generate Interview Questions'}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-all duration-300">
+              {questionsLoading ? 'Generating Questions...' : 'Generate Interview Questions'}
             </button>
 
             <button
               onClick={() => navigate(`/jobmatch/${resumeId}`)}
               className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 mt-4"
               style={{ boxShadow: '0 0 25px rgba(99,102,241,0.4)' }}>
-              🎯 Match with Job Description
+              Match with Job Description
             </button>
           </div>
         )}
@@ -510,7 +546,9 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             style={{ boxShadow: darkMode ? '0 0 40px rgba(99,102,241,0.08)' : 'none' }}>
 
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-pink-600/20 border border-pink-500/30 flex items-center justify-center text-xl">🎯</div>
+              <div className="w-10 h-10 rounded-xl bg-pink-600/20 border border-pink-500/30 flex items-center justify-center text-pink-400">
+                <Icon path={ICONS.target} className="w-5 h-5" />
+              </div>
               <div>
                 <h2 className={`text-xl font-bold ${text}`}>Interview Questions</h2>
                 <p className={`${subtext} text-sm`}>Click any question to see the answer</p>
@@ -520,7 +558,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
                 <span className="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>
-                <h3 className="text-blue-400 font-semibold text-base">💻 Technical Questions</h3>
+                <h3 className="text-blue-400 font-semibold text-base">Technical Questions</h3>
               </div>
               <div className="space-y-3">
                 {questions.technical.map((q, i) => (
@@ -532,7 +570,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
                 <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>
-                <h3 className="text-yellow-400 font-semibold text-base">🤝 Behavioral Questions</h3>
+                <h3 className="text-yellow-400 font-semibold text-base">Behavioral Questions</h3>
               </div>
               <div className="space-y-3">
                 {questions.behavioral.map((q, i) => (
@@ -544,7 +582,7 @@ const Dashboard = ({ darkMode, setDarkMode }) => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <span className="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
-                <h3 className="text-green-400 font-semibold text-base">👔 HR Questions</h3>
+                <h3 className="text-green-400 font-semibold text-base">HR Questions</h3>
               </div>
               <div className="space-y-3">
                 {questions.hr.map((q, i) => (
