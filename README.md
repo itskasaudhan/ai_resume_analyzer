@@ -268,9 +268,11 @@ ResuMate can be useful for:
 - [ ] More detailed ATS analysis
 - [ ] Job recommendation system
 - [ ] Resume version management
-- [ ] More detailed skill-gap analysis
+- [ ] Detailed skill-gap analysis
 - [ ] AI-generated resume improvements
 - [ ] Support for multiple resume formats
+- [ ] Resume keyword optimization
+- [ ] Personalized job recommendations
 
 ## 🌐 Project
 
