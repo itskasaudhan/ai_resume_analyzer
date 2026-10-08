@@ -5,7 +5,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 
-const API_URL = 'http://localhost:5000/api'
+const API_URL = 'https://ai-resume-analyzer-2-70e6.onrender.com/api'
 
 const FloatingOrb = ({ style }) => (
   <div className="absolute rounded-full blur-3xl opacity-20 animate-pulse" style={style} />
