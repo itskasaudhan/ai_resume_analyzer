@@ -6,7 +6,9 @@ import { toast } from 'react-toastify'
 import Navbar from '../components/Navbar'
 
 
-const API_URL = 'https://ai-resume-analyzer-2-70e6.onrender.com/api'
+const API_URL = import.meta.env.DEV
+  ? 'http://localhost:5000/api'
+  : 'https://ai-resume-analyzer-2-70e6.onrender.com/api'
 
 const JobMatch = () => {
   const { resumeId } = useParams()

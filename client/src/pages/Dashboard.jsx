@@ -6,8 +6,9 @@ import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
 
-const API_URL = 'https://ai-resume-analyzer-2-70e6.onrender.com/api'
-
+const API_URL = import.meta.env.DEV
+  ? 'http://localhost:5000/api'
+  : 'https://ai-resume-analyzer-2-70e6.onrender.com/api'
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  ICONS (inline SVG — no emoji, no extra deps)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
