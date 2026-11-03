@@ -7,8 +7,8 @@ import { toast } from 'react-toastify'
 
 const API_URL = import.meta.env.DEV
   ? 'http://localhost:5000/api'
-  : 'https://ai-resume-analyzer-2-70e6.onrender.com/api'
-  
+  : 'https://ai-resume-analyzer-1-x6p8.onrender.com/api'
+
 const FloatingOrb = ({ style }) => (
   <div className="absolute rounded-full blur-3xl opacity-20 animate-pulse" style={style} />
 )
